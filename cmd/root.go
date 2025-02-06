@@ -38,8 +38,40 @@ var rootCmd = &cobra.Command{
 		}
 		repoPath = resolvedRepoPath
 
+		// Pre-scan the repository for broken symlinks.
+		// We’ll add any broken symlink (converted to a repo–relative path) to the ignore list.
+		var brokenSymlinks []string
+		_ = filepath.Walk(repoPath, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return nil
+			}
+			if info.Mode()&os.ModeSymlink != 0 {
+				target, err := os.Readlink(path)
+				if err != nil {
+					return nil
+				}
+				if !filepath.IsAbs(target) {
+					target = filepath.Join(filepath.Dir(path), target)
+				}
+				if _, err := os.Stat(target); err != nil {
+					if os.IsNotExist(err) {
+						// Convert to a path relative to the repository root.
+						relPath, relErr := filepath.Rel(repoPath, path)
+						if relErr == nil {
+							brokenSymlinks = append(brokenSymlinks, relPath)
+						} else {
+							brokenSymlinks = append(brokenSymlinks, path)
+						}
+					}
+				}
+			}
+			return nil
+		})
+
 		ignoreList := prompt.GenerateIgnoreList(repoPath, ignoreFilePath, !ignoreGitignore)
-		repo, err := prompt.ProcessGitRepo(repoPath, ignoreList, prompt.IgnoreBrokenSymlinks(true))
+		ignoreList = append(ignoreList, brokenSymlinks...)
+
+		repo, err := prompt.ProcessGitRepo(repoPath, ignoreList)
 		if err != nil {
 			fmt.Printf("Error: %s\n", err)
 			os.Exit(1)
