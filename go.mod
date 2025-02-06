@@ -1,4 +1,4 @@
-module github.com/chand1012/git2gpt
+module github.com/mismailzai/git2gpt
 
 go 1.20
 
