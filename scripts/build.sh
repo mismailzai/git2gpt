@@ -2,7 +2,7 @@
 
 # Set the name of the output binary and Go package
 BINARY_NAME="git2gpt"
-GO_PACKAGE="github.com/chand1012/git2gpt"
+GO_PACKAGE="github.com/mismailzai/git2gpt"
 
 # Build for M1 Mac (Apple Silicon)
 env GOOS=darwin GOARCH=arm64 go build -o "${BINARY_NAME}" "${GO_PACKAGE}"

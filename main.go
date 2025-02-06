@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/chand1012/git2gpt/cmd"
+	"github.com/mismailzai/git2gpt/cmd"
 )
 
 func main() {

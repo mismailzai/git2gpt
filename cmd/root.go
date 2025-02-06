@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/chand1012/git2gpt/prompt"
+	"github.com/mismailzai/git2gpt/prompt"
 	"github.com/spf13/cobra"
 )
 

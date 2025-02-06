@@ -9,8 +9,8 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/chand1012/git2gpt/utils"
 	"github.com/gobwas/glob"
+	"github.com/mismailzai/git2gpt/utils"
 	"github.com/pkoukk/tiktoken-go"
 )
 
